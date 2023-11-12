@@ -1,3 +1,6 @@
+<?php
+include './dbc.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,18 +8,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
-        crossorigin="anonymous"></script>
+    <title>Amila Photography</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
     <!-- Bootstrap Font Icon CSS -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-        integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
 </head>
 
@@ -25,8 +22,7 @@
         <!-- Navbar Start     -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
             <a class="navbar-brand" href="./index.php">Amila Janaka</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -42,8 +38,7 @@
                         <a class="nav-link" href="./category.php">Category</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
-                            aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
                             More
                         </a>
                         <div class="dropdown-menu">
@@ -65,6 +60,29 @@
             </div>
         </nav>
         <!-- Navbar End -->
+        <div class="php_data_get">
+            <h1 class="text-center">
+                php data form
+            </h1>
+            <?php
+            //creating query
+            $sql = "SELECT * FROM users";
+
+            //query (run above query in database)
+            $result = mysqli_query($connnect, $sql);
+
+            //check result(how many rows)
+            $resultCheck = mysqli_num_rows($result);
+
+            //if number of results>0 ;
+            if ($resultCheck > 0) {
+                //print the esult using while loop
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo $row['id'] . " " . $row['name'] . " " . $row['email'] . " " . $row['password'] . "<br>";
+                }
+            }
+            ?>
+        </div>
         <!-- start of the footer -->
         <footer class="text-center text-white bg-secondary">
             <!-- Grid container -->
@@ -72,9 +90,7 @@
                 <!-- Section: Social media -->
                 <section class="mb-4">
                     <!-- Facebook -->
-                    <a class="btn btn-link btn-floating btn-lg text-dark m-1"
-                        href="https://web.facebook.com/amila.janaka.1293/" target="_blank" role="button"
-                        data-mdb-ripple-color="dark"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-link btn-floating btn-lg text-dark m-1" href="https://web.facebook.com/amila.janaka.1293/" target="_blank" role="button" data-mdb-ripple-color="dark"><i class="fab fa-facebook-f"></i></a>
 
                     <!-- Twitter -->
                     <!-- <a class="btn btn-link btn-floating btn-lg text-dark m-1" href="#!" target="_blank" role="button"
@@ -85,17 +101,12 @@
                     data-mdb-ripple-color="dark"><i class="fab fa-google"></i></a> -->
 
                     <!-- Instagram -->
-                    <a class="btn btn-link btn-floating btn-lg text-dark m-1"
-                        href="https://www.instagram.com/_amila_janaka_/" target="_blank" role="button"
-                        data-mdb-ripple-color="dark"><i class="fab fa-instagram"></i></a>
+                    <a class="btn btn-link btn-floating btn-lg text-dark m-1" href="https://www.instagram.com/_amila_janaka_/" target="_blank" role="button" data-mdb-ripple-color="dark"><i class="fab fa-instagram"></i></a>
 
                     <!-- Linkedin -->
-                    <a class="btn btn-link btn-floating btn-lg text-dark m-1"
-                        href="https://www.linkedin.com/in/amila-janaka-395724225/" target="_blank" role="button"
-                        data-mdb-ripple-color="dark"><i class="fab fa-linkedin"></i></a>
+                    <a class="btn btn-link btn-floating btn-lg text-dark m-1" href="https://www.linkedin.com/in/amila-janaka-395724225/" target="_blank" role="button" data-mdb-ripple-color="dark"><i class="fab fa-linkedin"></i></a>
                     <!-- Github -->
-                    <a class="btn btn-link btn-floating btn-lg text-dark m-1" href="https://github.com/Amila-Janaka"
-                        target="_blank" role="button" data-mdb-ripple-color="dark"><i class="fab fa-github"></i></a>
+                    <a class="btn btn-link btn-floating btn-lg text-dark m-1" href="https://github.com/Amila-Janaka" target="_blank" role="button" data-mdb-ripple-color="dark"><i class="fab fa-github"></i></a>
                 </section>
                 <!-- Section: Social media -->
             </div>
@@ -108,6 +119,7 @@
             <!-- Copyright -->
         </footer>
     </div>
+
 </body>
 
 </html>
