@@ -14,7 +14,7 @@ include './dbc.php';
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
     <!-- Bootstrap Font Icon CSS -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="./custom css/style.css">
 </head>
 
 <body>
@@ -60,31 +60,166 @@ include './dbc.php';
             </div>
         </nav>
         <!-- Navbar End -->
-        <div class="php_data_get">
-            <h1 class="text-center">
-                php data form
-            </h1>
-            <?php
-            //creating query
-            $sql = "SELECT * FROM users";
+        <div class="row">
+            <div class="php_data_get col-3">
+                <h1 class="text-center">
+                    All User Data
+                </h1>
+                <?php
+                //creating query
+                $sql = "SELECT * FROM users";
 
-            //query (run above query in database)
-            $result = mysqli_query($connnect, $sql);
+                echo "<table border='1' class='table mx-3 text-center'>
+                    <tr>
+                    <th>Id</th>
+                    <th>name</th>
+                    <th>email</th>
+                    </tr>";
 
-            //check result(how many rows)
-            $resultCheck = mysqli_num_rows($result);
+                //query (run above query in database)
+                $result = mysqli_query($connnect, $sql);
 
-            //if number of results>0 ;
-            if ($resultCheck > 0) {
-                //print the esult using while loop
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo $row['id'] . " " . $row['name'] . " " . $row['email'] . " " . $row['password'] . "<br>";
+                //check result(how many rows)
+                $resultCheck = mysqli_num_rows($result);
+
+                //if number of results>0 ;
+                if ($resultCheck > 0) {
+                    //print the esult using while loop
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        // echo $row['id'] . " " . $row['name'] . " " . $row['email'] . " " . $row['password'] . "<br>";
+                        echo "<tr>";
+
+                        echo "<td>" . $row['id'] . "</td>";
+
+                        echo "<td>" . $row['name'] . "</td>";
+
+                        echo "<td>" . $row['email'] . "</td>";
+
+                        echo "</tr>";
+                    }
+                    echo "</table>";
                 }
-            }
-            ?>
+                ?>
+            </div>
+            <div class="px-2 col-6 bg-secondary">
+                <form class="font-weight-bold was-validated mx-1 mx-md-4" method="POST">
+                    <div class="form-group">
+                        <label for="id">ID</label>
+                        <input type="text" class="form-control" id="id" name="id" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="UserName">User Name</label>
+                        <input type="text" class="form-control" id="userNameid" name="userName" placeholder="Ex : Jos Buttler" onblur="nameValidation()">
+                        <div id="userNameErrorMsgid" name="userNameErrorMsg"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Email">Email</label>
+                        <input type="email" class="form-control" id="emailid" name="email" placeholder="Ex : josbuttler01@gmail.com" onblur="emailValidation()">
+                        <div id="emailErrorMsgid" name="emailErrorMsg"></div>
+                    </div>
+                    <div class="col text-center mb-3">
+                        <!-- <button class="btn btn-outline-light btn-primary mx-1 my-2" type="submit" name="Insert Button" id="button-addon2">Insert</button> -->
+                        <button class="btn btn-outline-light btn-primary mx-1 my-2" type="submit" name="updateBTN" id="button-addon2">Update</button>
+                        <button class="btn btn-outline-light btn-primary mx-1 my-2" type="submit" name="deleteBTN" id="button-addon2">Delete</button>
+
+                    </div>
+                </form>
+                <?php
+                if (isset($_POST['updateBTN'])) {
+                    $id = $_POST['id'];
+                    $user_name =  $_POST['userName'];
+                    $user_email =  $_POST['email'];
+
+                    // $sql = "INSERT INTO users (name,email,password) VALUES (?,?,?)";
+                    $sql = "UPDATE users SET name=?, email=? WHERE id=? ";
+
+                    //create prepared statement
+                    $statement = mysqli_stmt_init($connnect);
+                    //prepare th prepared statement
+                    if (!mysqli_stmt_prepare($statement, $sql)) {
+                        echo    "SQL Statement Faild";
+                    } else {
+                        mysqli_stmt_bind_param($statement, "sss", $user_name, $user_email, $id);
+                        //initializing $statement / number of 's' depends on number of question marks
+
+                        //run parameters inside the database
+                        mysqli_stmt_execute($statement);
+                        echo "Sucesfull updated";
+                    }
+                }
+                ?>
+            </div>
+
+            <div class="php_find_data my-3 col-3">
+                <h1 class="text-center">
+                    Search Your Data
+                </h1>
+                <!-- To get user inputs -->
+                <form method="POST">
+                    <div class="input-group mb-3 container-fluid">
+                        <input type="text" class="form-control" name="searchText" placeholder="Enter Keyword" aria-label="Recipient's keyword" aria-describedby="button-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-light btn-primary mx-1" type="submit" name="searchBTN" id="button-addon2">Search</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Stop SQL Injection Method 2 -->
+                <?php
+                // Insert data using prepared statements
+                if (isset($_POST['searchBTN'])) {
+                    $userKeyword = $_POST['searchText'];
+
+                    $sql = "SELECT * FROM users WHERE name = ? or email = ?";
+                    echo " <table class='table'>
+                    <thead class='thead-dark'>
+                      <tr>
+                        <th scope='col'>ID</th>
+                        <th scope='col'>Name</th>
+                        <th scope='col'>Email</th>
+                      </tr>
+                    </thead>";
+
+                    // Create a prepared statement
+                    $stmt = mysqli_stmt_init($connnect);
+
+                    // Prepare the prepared statement
+                    if (!mysqli_stmt_prepare($stmt, $sql)) {
+                        echo "SQL statement failed!";
+                    } else {
+                        // Bind parameters to the placeholders
+                        mysqli_stmt_bind_param($stmt, "ss", $userKeyword, $userKeyword);
+
+                        // Run parameter inside the databse
+                        mysqli_stmt_execute($stmt);
+
+                        // Get the data
+                        $result = mysqli_stmt_get_result($stmt);
+
+                        // Print Data
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            // echo $row['id'] . "  " . $row['name'] . "  " . $row['password'] . "<br>";
+                            echo  "<tbody>";
+                            echo "<tr>";
+
+                            echo "<td>" . $row['id'] . "</td>";
+
+                            echo "<td>" . $row['name'] . "</td>";
+
+                            echo "<td>" . $row['email'] . "</td>";
+                            echo "</tr>";
+                            echo "<tr>";
+                            echo  "</tbody>";
+                        }
+                    }
+                    echo "</table>";
+                }
+                ?>
+            </div>
+
         </div>
         <!-- start of the footer -->
-        <footer class="text-center text-white bg-secondary">
+        <footer class="text-center text-white bg-secondary footer">
             <!-- Grid container -->
             <div class="container pt-4">
                 <!-- Section: Social media -->

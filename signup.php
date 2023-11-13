@@ -151,18 +151,44 @@ include "./dbc.php";
             <!-- Copyright -->
         </footer>
     </div>
+    <!-- sql injection method 1 -->
+    <?php
+    // if (isset($_POST['submitBTN'])) {
+    //     $user_name = mysqli_real_escape_string($connnect, $_POST['userName']);
+    //     $user_email = mysqli_real_escape_string($connnect, $_POST['email']);
+    //     $user_password = mysqli_real_escape_string($connnect, $_POST['password']);
+    //     $user_password_confirm = mysqli_real_escape_string($connnect, $_POST['password']);
+
+    //     $sql = "INSERT INTO users (name,email,password) VALUES ('$user_name','$user_email','$user_password')";
+    //     if (mysqli_query($connnect, $sql)) {
+    //         echo "Data inserted";
+    //     } else {
+    //         echo "Oh! data not inserted";
+    //     }
+    // }
+    ?>
+    <!-- sql injection method 2 -->
     <?php
     if (isset($_POST['submitBTN'])) {
-        $user_name = $_POST['userName'];
-        $user_email = $_POST['email'];
+        $user_name =  $_POST['userName'];
+        $user_email =  $_POST['email'];
         $user_password = $_POST['password'];
-        $user_password_confirm = $_POST['password'];
+        $user_password_confirm =  $_POST['password'];
 
-        $sql = "INSERT INTO users (name,email,password) VALUES ('$user_name','$user_email','$user_password')";
-        if (mysqli_query($connnect, $sql)) {
-            echo "Data inserted";
+        $sql = "INSERT INTO users (name,email,password) VALUES (?,?,?)";
+
+        //create prepared statement
+        $statement = mysqli_stmt_init($connnect);
+        //prepare th prepared statement
+        if (!mysqli_stmt_prepare($statement, $sql)) {
+            echo    "SQL Statement Faild";
         } else {
-            echo "Oh! data not inserted";
+            mysqli_stmt_bind_param($statement, "ss", $user_name, $user_email, $user_password);
+            //initializing $statement / number of 's' depends on number of question marks
+
+            //run parameters inside the database
+            mysqli_stmt_execute($statement);
+            echo"Sucesfull inserted";
         }
     }
     ?>
