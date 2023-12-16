@@ -73,7 +73,7 @@ include "./dbc.php";
                                         <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
 
-                                        <form class="font-weight-bold was-validated mx-1 mx-md-4" method="POST">
+                                        <form class="font-weight-bold was-validated mx-1 mx-md-4" action="./signup.php" method="POST">
                                             <div class="form-group">
                                                 <label for="UserName">User Name</label>
                                                 <input type="text" class="form-control" id="userNameid" name="userName" placeholder="Ex : Jos Buttler" onblur="nameValidation()" required>
@@ -183,7 +183,7 @@ include "./dbc.php";
         if (!mysqli_stmt_prepare($statement, $sql)) {
             echo    "SQL Statement Faild";
         } else {
-            mysqli_stmt_bind_param($statement, "ss", $user_name, $user_email, $user_password);
+            mysqli_stmt_bind_param($statement, "sss", $user_name, $user_email, $user_password);
             //initializing $statement / number of 's' depends on number of question marks
 
             //run parameters inside the database

@@ -15,6 +15,7 @@ include './dbc.php';
     <!-- Bootstrap Font Icon CSS -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="./custom css/style.css">
+    <script src="./custom js/admin.js"></script>
 </head>
 
 <body>
@@ -61,7 +62,7 @@ include './dbc.php';
         </nav>
         <!-- Navbar End -->
         <div class="row">
-            <div class="php_data_get col-3">
+            <div class="php_data_get col-5">
                 <h1 class="text-center">
                     All User Data
                 </h1>
@@ -101,8 +102,8 @@ include './dbc.php';
                 }
                 ?>
             </div>
-            <div class="px-2 col-6 bg-secondary">
-                <form class="font-weight-bold was-validated mx-1 mx-md-4" method="POST">
+            <div class="px-2 col-4 bg-secondary">
+                <form class="font-weight-bold was-validated mx-1 mx-md-4" method="POST" action="admin.php">
                     <div class="form-group">
                         <label for="id">ID</label>
                         <input type="text" class="form-control" id="id" name="id" required>
@@ -119,11 +120,16 @@ include './dbc.php';
                     </div>
                     <div class="col text-center mb-3">
                         <!-- <button class="btn btn-outline-light btn-primary mx-1 my-2" type="submit" name="Insert Button" id="button-addon2">Insert</button> -->
-                        <button class="btn btn-outline-light btn-primary mx-1 my-2" type="submit" name="updateBTN" id="button-addon2">Update</button>
+                        <button class="btn btn-outline-light btn-primary mx-1 my-2" type="submit" name="updateBTN" id="button-addon2" onclick="reloadPage()">Update</button>
                         <button class="btn btn-outline-light btn-primary mx-1 my-2" type="submit" name="deleteBTN" id="button-addon2">Delete</button>
-
                     </div>
                 </form>
+                <!-- <script>
+                    // JavaScript function to reload the page
+                    function reloadPage() {
+                        location.reload();
+                    }
+                </script> -->
                 <?php
                 if (isset($_POST['updateBTN'])) {
                     $id = $_POST['id'];
@@ -144,7 +150,9 @@ include './dbc.php';
 
                         //run parameters inside the database
                         mysqli_stmt_execute($statement);
-                        echo "Sucesfull updated";
+                        echo '<script>
+                        console.log("Sucesfull updated");
+                        </script>';
                     }
                 }
                 ?>
