@@ -178,7 +178,7 @@ include './dbc.php';
                 if (isset($_POST['searchBTN'])) {
                     $userKeyword = $_POST['searchText'];
 
-                    $sql = "SELECT * FROM users WHERE name = ? or email = ?";
+                    $sql = "SELECT * FROM users WHERE id = ? or name = ? or email = ?";
                     echo " <table class='table'>
                     <thead class='thead-dark'>
                       <tr>
@@ -196,7 +196,7 @@ include './dbc.php';
                         echo "SQL statement failed!";
                     } else {
                         // Bind parameters to the placeholders
-                        mysqli_stmt_bind_param($stmt, "ss", $userKeyword, $userKeyword);
+                        mysqli_stmt_bind_param($stmt, "sss",$userKeyword, $userKeyword, $userKeyword);
 
                         // Run parameter inside the databse
                         mysqli_stmt_execute($stmt);
